@@ -2312,7 +2312,7 @@ replay:
 			return -ENODEV;
 		}
 
-		if (tb[IFLA_MAP] || tb[IFLA_MASTER] || tb[IFLA_PROTINFO])
+		if (tb[IFLA_MAP] || tb[IFLA_PROTINFO])
 			return -EOPNOTSUPP;
 
 		if (!ops) {
@@ -2394,6 +2394,11 @@ replay:
 			if (err < 0)
 				goto out_unregister;
 		}
+                if (tb[IFLA_MASTER]) {
+                        err = do_set_master(dev, nla_get_u32(tb[IFLA_MASTER]));
+                        if (err)
+                                goto out_unregister;
+                }
 out:
 		if (link_net)
 			put_net(link_net);
